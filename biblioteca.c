@@ -3,187 +3,189 @@
 #include <string.h>
 
 typedef struct Livro {
-    int codigo;
-    char titulo[100];
+    int codigo;               // ISBN/ISSN
     char autor[100];
-    char data_publicacao[11]; // Formato: "dd/mm/yyyy"
-    int numero; // Numero de exemplares
+    char data_publicacao[20];
+    char titulo[100];
 } Livro;
 
-typedef struct Node {
+typedef struct No {
     Livro livro;
-    struct Node *esquerdo;
-    struct Node *direito;
-} Node;
+    struct No* esquerda;
+    struct No* direita;
+} No;
 
-// Funcoes
-Node* criarNo(Livro livro);
-Node* inserir(Node* raiz, Livro livro);
-Node* buscar(Node* raiz, int codigo);
-Node* encontrarMinimo(Node* raiz);
-Node* remover(Node* raiz, int codigo);
-void exibirArvore(Node* raiz, int espacos, int nivel);
-void liberarArvore(Node* raiz);
+// Declaração do protótipo da função exibirLivro
+void exibirLivro(Livro livro);
 
-int main() {
-    Node* raiz = NULL;
-    Livro livro;
-
-    // Definir o primeiro livro como a raiz
-    livro.codigo = 30;
-    strcpy(livro.titulo, "Estruturas de Dados");
-    strcpy(livro.autor, "Autor C");
-    strcpy(livro.data_publicacao, "03/03/2022");
-    livro.numero = 2;
-    raiz = inserir(raiz, livro);  // Inserir o primeiro livro como raiz
-
-    // Inserir outros livros
-    livro.codigo = 20;
-    strcpy(livro.titulo, "Algoritmos em C");
-    strcpy(livro.autor, "Autor B");
-    strcpy(livro.data_publicacao, "02/02/2021");
-    livro.numero = 3;
-    raiz = inserir(raiz, livro);
-
-    livro.codigo = 1;
-    strcpy(livro.titulo, "Aprendendo C");
-    strcpy(livro.autor, "Autor A");
-    strcpy(livro.data_publicacao, "01/01/2020");
-    livro.numero = 5;
-    raiz = inserir(raiz, livro);
-
-    livro.codigo = 8;
-    strcpy(livro.titulo, "Estruturas de Dados Avancadas");
-    strcpy(livro.autor, "Autor D");
-    strcpy(livro.data_publicacao, "04/04/2023");
-    livro.numero = 4;
-    raiz = inserir(raiz, livro);
-
-    livro.codigo = 10;
-    strcpy(livro.titulo, "Programacao Estruturada");
-    strcpy(livro.autor, "Autor E");
-    strcpy(livro.data_publicacao, "05/05/2024");
-    livro.numero = 6;
-    raiz = inserir(raiz, livro);
-
-    livro.codigo = 15;
-    strcpy(livro.titulo, "Banco de Dados");
-    strcpy(livro.autor, "Autor F");
-    strcpy(livro.data_publicacao, "06/06/2025");
-    livro.numero = 7;
-    raiz = inserir(raiz, livro);
-
-    // Exibir livros antes da remocao
-    printf("Arvore antes da remocao:\n");
-    exibirArvore(raiz, 0, 0);
-
-    // Remover um livro (com codigo 8, por exemplo)
-    raiz = remover(raiz, 8);
-
-    // Exibir livros apos a remocao
-    printf("\nArvore apos remocao do livro com Codigo 8:\n");
-    exibirArvore(raiz, 0, 0);
-
-    // Liberar a memoria
-    liberarArvore(raiz);
-
-    return 0;
-}
-
-// Funcao para criar um novo no
-Node* criarNo(Livro livro) {
-    Node* novoNo = (Node*)malloc(sizeof(Node));
-    if (!novoNo) {
-        printf("Erro na alocacao de memoria!\n");
-        exit(1);
-    }
+// Função para criar um novo nó
+No* criarNo(Livro livro) {
+    No* novoNo = (No*)malloc(sizeof(No));
     novoNo->livro = livro;
-    novoNo->esquerdo = NULL;
-    novoNo->direito = NULL;
+    novoNo->esquerda = novoNo->direita = NULL;
     return novoNo;
 }
 
-// Funcao para inserir um livro na ABB
-Node* inserir(Node* raiz, Livro livro) {
-    if (raiz == NULL) {
+// Função para inserir um nó na ABB
+No* inserirNo(No* raiz, Livro livro) {
+    if (raiz == NULL)
         return criarNo(livro);
-    }
-    if (livro.codigo < raiz->livro.codigo) {
-        raiz->esquerdo = inserir(raiz->esquerdo, livro);
-    } else if (livro.codigo > raiz->livro.codigo) {
-        raiz->direito = inserir(raiz->direito, livro);
-    }
+
+    if (livro.codigo < raiz->livro.codigo)
+        raiz->esquerda = inserirNo(raiz->esquerda, livro);
+    else if (livro.codigo > raiz->livro.codigo)
+        raiz->direita = inserirNo(raiz->direita, livro);
+
     return raiz;
 }
 
-// Funcao para buscar um livro na ABB
-Node* buscar(Node* raiz, int codigo) {
-    if (raiz == NULL || raiz->livro.codigo == codigo) {
+// Função para buscar um nó na ABB
+No* buscarNo(No* raiz, int codigo) {
+    if (raiz == NULL || raiz->livro.codigo == codigo)
         return raiz;
-    }
-    if (codigo < raiz->livro.codigo) {
-        return buscar(raiz->esquerdo, codigo);
-    }
-    return buscar(raiz->direito, codigo);
+
+    if (codigo < raiz->livro.codigo)
+        return buscarNo(raiz->esquerda, codigo);
+    else
+        return buscarNo(raiz->direita, codigo);
 }
 
-// Funcao para encontrar o no com o valor minimo (para remocao)
-Node* encontrarMinimo(Node* raiz) {
-    while (raiz->esquerdo != NULL) {
-        raiz = raiz->esquerdo;
-    }
+// Função auxiliar para encontrar o nó mínimo
+No* encontrarMinimo(No* raiz) {
+    while (raiz && raiz->esquerda != NULL)
+        raiz = raiz->esquerda;
     return raiz;
 }
 
-// Funcao para remover um livro da ABB
-Node* remover(Node* raiz, int codigo) {
-    if (raiz == NULL) {
-        return raiz;
-    }
-    if (codigo < raiz->livro.codigo) {
-        raiz->esquerdo = remover(raiz->esquerdo, codigo);
-    } else if (codigo > raiz->livro.codigo) {
-        raiz->direito = remover(raiz->direito, codigo);
-    } else {
-        // Caso 1: No com apenas um filho ou sem filhos
-        if (raiz->esquerdo == NULL) {
-            Node* temp = raiz->direito;
+// Função para remover um nó da ABB
+No* removerNo(No* raiz, int codigo) {
+    if (raiz == NULL) return NULL;
+
+    if (codigo < raiz->livro.codigo)
+        raiz->esquerda = removerNo(raiz->esquerda, codigo);
+    else if (codigo > raiz->livro.codigo)
+        raiz->direita = removerNo(raiz->direita, codigo);
+    else {
+        if (raiz->esquerda == NULL) {
+            No* temp = raiz->direita;
             free(raiz);
             return temp;
-        } else if (raiz->direito == NULL) {
-            Node* temp = raiz->esquerdo;
+        } else if (raiz->direita == NULL) {
+            No* temp = raiz->esquerda;
             free(raiz);
             return temp;
         }
 
-        // Caso 2: No com dois filhos
-        Node* temp = encontrarMinimo(raiz->direito);
+        No* temp = encontrarMinimo(raiz->direita);
         raiz->livro = temp->livro;
-        raiz->direito = remover(raiz->direito, temp->livro.codigo);
+        raiz->direita = removerNo(raiz->direita, temp->livro.codigo);
     }
     return raiz;
 }
 
-// Funcao para exibir a arvore em forma hierarquica com conexoes
-void exibirArvore(Node* raiz, int espacos, int nivel) {
+// Função para imprimir os livros em ordem crescente de código
+void imprimirEmOrdem(No* raiz) {
     if (raiz != NULL) {
-        exibirArvore(raiz->direito, espacos + 6, nivel + 1);
-        
-        for (int i = 0; i < espacos; i++) {
-            printf(" ");
-        }
-        
-        printf("%d\n", raiz->livro.codigo);
-        
-        exibirArvore(raiz->esquerdo, espacos + 6, nivel + 1);
+        imprimirEmOrdem(raiz->esquerda);
+        exibirLivro(raiz->livro);
+        printf("\n");
+        imprimirEmOrdem(raiz->direita);
     }
 }
 
-// Funcao para liberar a memoria da arvore
-void liberarArvore(Node* raiz) {
+// Função para exibir os dados de um livro
+void exibirLivro(Livro livro) {
+    printf("Codigo: %d\n", livro.codigo);
+    printf("Autor: %s\n", livro.autor);
+    printf("Data de Publicacao: %s\n", livro.data_publicacao);
+    printf("Titulo: %s\n", livro.titulo);
+}
+
+// Função para liberar a memória da árvore
+void liberarArvore(No* raiz) {
     if (raiz != NULL) {
-        liberarArvore(raiz->esquerdo);
-        liberarArvore(raiz->direito);
+        liberarArvore(raiz->esquerda);
+        liberarArvore(raiz->direita);
         free(raiz);
     }
+}
+
+// Função para coletar dados de um livro do usuário
+Livro lerLivro() {
+    Livro livro;
+    printf("Digite o codigo do livro (ISBN/ISSN): ");
+    scanf("%d", &livro.codigo);
+    getchar();
+
+    printf("Digite o autor: ");
+    fgets(livro.autor, 100, stdin);
+    livro.autor[strcspn(livro.autor, "\n")] = '\0';
+
+    printf("Digite a data de publicacao: ");
+    fgets(livro.data_publicacao, 20, stdin);
+    livro.data_publicacao[strcspn(livro.data_publicacao, "\n")] = '\0';
+
+    printf("Digite o titulo do livro: ");
+    fgets(livro.titulo, 100, stdin);
+    livro.titulo[strcspn(livro.titulo, "\n")] = '\0';
+
+    return livro;
+}
+
+int main() {
+    No* raiz = NULL;
+    int opcao, codigo;
+
+    do {
+        printf("\n--- Menu ---\n");
+        printf("1. Inserir Livro\n");
+        printf("2. Buscar Livro\n");
+        printf("3. Remover Livro\n");
+        printf("4. Imprimir\n");
+        printf("5. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1: {
+                Livro livro = lerLivro();
+                raiz = inserirNo(raiz, livro);
+                printf("Livro inserido com sucesso!\n");
+                break;
+            }
+            case 2: {
+                printf("Digite o codigo do livro para buscar: ");
+                scanf("%d", &codigo);
+                No* encontrado = buscarNo(raiz, codigo);
+                if (encontrado != NULL) {
+                    printf("Livro encontrado:\n");
+                    exibirLivro(encontrado->livro);
+                } else {
+                    printf("Livro nao encontrado.\n");
+                }
+                break;
+            }
+            case 3: {
+                printf("Digite o codigo do livro para remover: ");
+                scanf("%d", &codigo);
+                raiz = removerNo(raiz, codigo);
+                printf("Livro removido com sucesso!\n");
+                break;
+            }
+
+            case 4: {
+                printf("Livros na biblioteca:\n");
+                imprimirEmOrdem(raiz);
+                break;
+            }
+            case 5:
+                printf("Saindo...\n");
+                liberarArvore(raiz);
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+    } while (opcao != 5);
+
+    return 0;
 }
