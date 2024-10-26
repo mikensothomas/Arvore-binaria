@@ -3,7 +3,7 @@
 #include <string.h>
 
 typedef struct Livro {
-    int codigo;               // ISBN/ISSN
+    int codigo;
     char autor[100];
     char data_publicacao[20];
     char titulo[100];
@@ -15,10 +15,8 @@ typedef struct No {
     struct No* direita;
 } No;
 
-// Declaração do protótipo da função exibirLivro
 void exibirLivro(Livro livro);
 
-// Função para criar um novo nó
 No* criarNo(Livro livro) {
     No* novoNo = (No*)malloc(sizeof(No));
     novoNo->livro = livro;
@@ -26,7 +24,6 @@ No* criarNo(Livro livro) {
     return novoNo;
 }
 
-// Função para inserir um nó na ABB
 No* inserirNo(No* raiz, Livro livro) {
     if (raiz == NULL)
         return criarNo(livro);
@@ -39,7 +36,6 @@ No* inserirNo(No* raiz, Livro livro) {
     return raiz;
 }
 
-// Função para buscar um nó na ABB
 No* buscarNo(No* raiz, int codigo) {
     if (raiz == NULL || raiz->livro.codigo == codigo)
         return raiz;
@@ -50,14 +46,12 @@ No* buscarNo(No* raiz, int codigo) {
         return buscarNo(raiz->direita, codigo);
 }
 
-// Função auxiliar para encontrar o nó mínimo
 No* encontrarMinimo(No* raiz) {
     while (raiz && raiz->esquerda != NULL)
         raiz = raiz->esquerda;
     return raiz;
 }
 
-// Função para remover um nó da ABB
 No* removerNo(No* raiz, int codigo) {
     if (raiz == NULL) return NULL;
 
@@ -83,7 +77,6 @@ No* removerNo(No* raiz, int codigo) {
     return raiz;
 }
 
-// Função para imprimir os livros em ordem crescente de código
 void imprimirEmOrdem(No* raiz) {
     if (raiz != NULL) {
         imprimirEmOrdem(raiz->esquerda);
@@ -93,7 +86,6 @@ void imprimirEmOrdem(No* raiz) {
     }
 }
 
-// Função para exibir os dados de um livro
 void exibirLivro(Livro livro) {
     printf("Codigo: %d\n", livro.codigo);
     printf("Autor: %s\n", livro.autor);
@@ -101,7 +93,6 @@ void exibirLivro(Livro livro) {
     printf("Titulo: %s\n", livro.titulo);
 }
 
-// Função para liberar a memória da árvore
 void liberarArvore(No* raiz) {
     if (raiz != NULL) {
         liberarArvore(raiz->esquerda);
@@ -110,7 +101,6 @@ void liberarArvore(No* raiz) {
     }
 }
 
-// Função para coletar dados de um livro do usuário
 Livro lerLivro() {
     Livro livro;
     printf("Digite o codigo do livro (ISBN/ISSN): ");
