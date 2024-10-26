@@ -102,10 +102,12 @@ void imprimirPosOrdem(No* raiz) {
 }
 
 void exibirLivro(Livro livro) {
+    printf("\n");
     printf("Codigo: %d\n", livro.codigo);
     printf("Autor: %s\n", livro.autor);
     printf("Data de Publicacao: %s\n", livro.data_publicacao);
     printf("Titulo: %s\n", livro.titulo);
+    printf("\n");
 }
 
 void liberarArvore(No* raiz) {
@@ -142,14 +144,15 @@ int main() {
     int opcao, codigo;
 
     do {
-         printf("\n--- Menu ---\n");
+        printf("\n--- Menu ---\n");
         printf("1. Inserir Livro\n");
         printf("2. Buscar Livro\n");
         printf("3. Remover Livro\n");
         printf("4. Imprimir em Ordem\n");
-        printf("5. Imprimir em Pré-Ordem\n");
-        printf("6. Imprimir em Pós-Ordem\n");
+        printf("5. Imprimir em Pre-Ordem\n");
+        printf("6. Imprimir em Pos-Ordem\n");
         printf("7. Sair\n");
+        printf("\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -165,11 +168,13 @@ int main() {
                 scanf("%d", &codigo);
                 No* encontrado = buscarNo(raiz, codigo);
                 if (encontrado != NULL) {
+                    printf("==================================================");
                     printf("Livro encontrado:\n");
                     exibirLivro(encontrado->livro);
                 } else {
                     printf("Livro nao encontrado.\n");
                 }
+                printf("=======================================================");
                 break;
             }
             case 3: {
@@ -189,13 +194,13 @@ int main() {
             }
             case 5:
                 printf("=========================================================");
-                printf("Livros em Pré-Ordem:\n");
+                printf("Livros em Pre-Ordem:\n");
                 imprimirPreOrdem(raiz);
                 printf("=========================================================");
                 break;
             case 6:
                 printf("==========================================================");
-                printf("Livros em Pós-Ordem:\n");
+                printf("Livros em Pos-Ordem:\n");
                 imprimirPosOrdem(raiz);
                 printf("===========================================================");
                 break;
