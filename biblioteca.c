@@ -77,12 +77,27 @@ No* removerNo(No* raiz, int codigo) {
     return raiz;
 }
 
+void imprimirPreOrdem(No* raiz) {
+    if (raiz != NULL) {
+        exibirLivro(raiz->livro);
+        imprimirPreOrdem(raiz->esquerda);
+        imprimirPreOrdem(raiz->direita);
+    }
+}
+
 void imprimirEmOrdem(No* raiz) {
     if (raiz != NULL) {
         imprimirEmOrdem(raiz->esquerda);
         exibirLivro(raiz->livro);
-        printf("\n");
         imprimirEmOrdem(raiz->direita);
+    }
+}
+
+void imprimirPosOrdem(No* raiz) {
+    if (raiz != NULL) {
+        imprimirPosOrdem(raiz->esquerda);
+        imprimirPosOrdem(raiz->direita);
+        exibirLivro(raiz->livro);
     }
 }
 
@@ -127,16 +142,16 @@ int main() {
     int opcao, codigo;
 
     do {
-        printf("\n--- Menu ---\n");
+         printf("\n--- Menu ---\n");
         printf("1. Inserir Livro\n");
         printf("2. Buscar Livro\n");
         printf("3. Remover Livro\n");
-        printf("4. Imprimir\n");
-        printf("5. Sair\n");
-        printf("\n");
+        printf("4. Imprimir em Ordem\n");
+        printf("5. Imprimir em Pré-Ordem\n");
+        printf("6. Imprimir em Pós-Ordem\n");
+        printf("7. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
-        printf("\n");
 
         switch (opcao) {
             case 1: {
@@ -173,13 +188,25 @@ int main() {
                 break;
             }
             case 5:
+                printf("=========================================================");
+                printf("Livros em Pré-Ordem:\n");
+                imprimirPreOrdem(raiz);
+                printf("=========================================================");
+                break;
+            case 6:
+                printf("==========================================================");
+                printf("Livros em Pós-Ordem:\n");
+                imprimirPosOrdem(raiz);
+                printf("===========================================================");
+                break;
+            case 7:
                 printf("Saindo...\n");
                 liberarArvore(raiz);
                 break;
             default:
                 printf("Opcao invalida!\n");
         }
-    } while (opcao != 5);
+    } while (opcao != 7);
 
     return 0;
 }
