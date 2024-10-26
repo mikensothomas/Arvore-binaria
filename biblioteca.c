@@ -133,8 +133,10 @@ int main() {
         printf("3. Remover Livro\n");
         printf("4. Imprimir\n");
         printf("5. Sair\n");
+        printf("\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
+        printf("\n");
 
         switch (opcao) {
             case 1: {
@@ -164,8 +166,10 @@ int main() {
             }
 
             case 4: {
+                printf("=======================================================\n");
                 printf("Livros na biblioteca:\n");
                 imprimirEmOrdem(raiz);
+                printf("========================================================");
                 break;
             }
             case 5:
