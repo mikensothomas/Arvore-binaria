@@ -205,7 +205,7 @@ int main() {
                 printf("===========================================================");
                 break;
             case 7:
-                printf("Saindo...\n");
+                printf("Saido...\n");
                 liberarArvore(raiz);
                 break;
             default:
