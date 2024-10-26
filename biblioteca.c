@@ -187,20 +187,20 @@ int main() {
 
             case 4: {
                 printf("=======================================================\n");
-                printf("Livros na biblioteca:\n");
+                printf("Livros na biblioteca em ordem:\n");
                 imprimirEmOrdem(raiz);
                 printf("========================================================");
                 break;
             }
             case 5:
                 printf("=========================================================\n");
-                printf("Livros em Pre-Ordem:\n");
+                printf("Livros na biblioteca em Pre-Ordem:\n");
                 imprimirPreOrdem(raiz);
                 printf("=========================================================");
                 break;
             case 6:
                 printf("==========================================================\n");
-                printf("Livros em Pos-Ordem:\n");
+                printf("Livros na biblioteca em Pos-Ordem:\n");
                 imprimirPosOrdem(raiz);
                 printf("===========================================================");
                 break;
