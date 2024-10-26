@@ -168,7 +168,7 @@ int main() {
                 scanf("%d", &codigo);
                 No* encontrado = buscarNo(raiz, codigo);
                 if (encontrado != NULL) {
-                    printf("==================================================");
+                    printf("==================================================\n");
                     printf("Livro encontrado:\n");
                     exibirLivro(encontrado->livro);
                 } else {
@@ -193,13 +193,13 @@ int main() {
                 break;
             }
             case 5:
-                printf("=========================================================");
+                printf("=========================================================\n");
                 printf("Livros em Pre-Ordem:\n");
                 imprimirPreOrdem(raiz);
                 printf("=========================================================");
                 break;
             case 6:
-                printf("==========================================================");
+                printf("==========================================================\n");
                 printf("Livros em Pos-Ordem:\n");
                 imprimirPosOrdem(raiz);
                 printf("===========================================================");
